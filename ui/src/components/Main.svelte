@@ -61,42 +61,54 @@
 
 
 <div class="w-screen h-screen flex justify-end { $IS_RIGHT_MARGIN ? 'flex-row' : 'flex-row-reverse' } items-end">
-  <div class="w-[25%] h-[97%]"
+  <div class="w-[28%] h-[97%]"
        class:ml-[2vh]={!$IS_RIGHT_MARGIN}
        class:mr-[2vh]={$IS_RIGHT_MARGIN}
       >
     {#each notifications.slice().reverse() as dispatch, index (dispatch.data.id)}
-      <div class="w-full h-fit my-[0.5vh] font-medium {dispatch.data.priority == 1 ? " bg-priority_secondary" : " bg-secondary"}" transition:fly="{{ x: $IS_RIGHT_MARGIN ? 400 : -400 }}">
-        <div class="flex items-center gap-[1vh] p-[1vh] text-[1.5vh] {dispatch.data.priority == 1 ? " bg-priority_primary" : " bg-primary"}">
-          <p class="px-[2vh] py-[0.2vh] rounded-full bg-accent_green">
-            #{dispatch.data.id}
-          </p>
-          <p class="px-[2vh] py-[0.2vh] rounded-full {dispatch.data.priority == 1 ? " bg-accent_red" : "bg-accent_cyan"}">
-            {dispatch.data.code}
-          </p>
-          <p class="py-[0.2vh]">
-            {dispatch.data.message}
-          </p>
-          <i class="{dispatch.data.icon} py-[0.2vh] ml-auto mr-[0.5vh] {dispatch.data.priority == 1 ? " text-accent_red" : "text-accent_cyan"}"></i>
+      <div class="w-full h-fit my-[0.5vh] {dispatch.data.priority == 1 ? 'border-l-4 border-red-500' : 'border-l-4 border-blue-500'} bg-slate-900 hover:bg-slate-800 transition-colors duration-200" transition:fly="{{ x: $IS_RIGHT_MARGIN ? 400 : -400 }}">
+        <!-- HEADER -->
+        <div class="bg-slate-800 p-[1.5vh] border-b border-slate-700">
+          <div class="flex items-center gap-[1vh]">
+            <!-- CALL ID -->
+            <div class="px-[1vh] py-[0.3vh] bg-blue-600 text-white font-bold text-[1.2vh] font-mono">
+              #{dispatch.data.id}
+            </div>
+            <!-- CODE -->
+            <div class="px-[1vh] py-[0.3vh] {dispatch.data.priority == 1 ? 'bg-red-600' : 'bg-slate-700'} text-white font-semibold text-[1.2vh]">
+              {dispatch.data.code}
+            </div>
+            <!-- MESSAGE -->
+            <div class="flex-1">
+              <h3 class="text-white text-[1.4vh] font-medium">{dispatch.data.message}</h3>
+            </div>
+            <!-- STATUS ICON -->
+            <div class="{dispatch.data.priority == 1 ? 'text-red-400' : 'text-blue-400'} text-[1.4vh]">
+              <i class="{dispatch.data.icon}"></i>
+            </div>
+          </div>
         </div>
+        
+        <!-- CONTENT -->
         <div class="flex">
-          <div class="flex flex-col p-[1vh] gap-y-[0.4vh] text-[1.4vh] w-[70%]">
+          <div class="flex flex-col p-[1.5vh] gap-y-[0.5vh] text-[1.1vh] w-[70%]">
               {#if dispatch.data}
                 {#each getDispatchData(dispatch) as field}
                   {#if field.value}
-                    <p>
-                      <i class={field.icon + ' mr-[0.5vh]'}></i>
-                      {field.label}: {field.value}
-                    </p>
+                    <div class="flex items-center gap-[0.5vh] text-slate-400">
+                      <i class="{field.icon} text-blue-400 text-[1vh] w-[1.2vh]"></i>
+                      <span class="text-slate-500 min-w-[6vh]">{field.label}:</span>
+                      <span class="text-slate-300">{field.value}</span>
+                    </div>
                   {/if}
                 {/each}
               {/if}
           </div>
-          <div class="w-[30%] flex items-end justify-center mb-[1vh]">
+          <div class="w-[30%] flex items-end justify-center p-[1.5vh]">
             {#if index === 0}
-              <p class="px-[1.5vh] py-[0.4vh] rounded-full text-[1.3vh] {dispatch.data.priority == 1 ? " bg-priority_primary" : " bg-primary"}">
+              <div class="bg-blue-700 hover:bg-blue-600 text-white px-[1.5vh] py-[0.6vh] text-[1.2vh] font-medium transition-colors duration-200">
                 [{$RESPOND_KEYBIND}] Respond
-              </p>
+              </div>
             {/if}
           </div>
         </div>
