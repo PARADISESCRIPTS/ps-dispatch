@@ -1,5 +1,10 @@
 # PS Dispatch
 
+## Preview :
+
+<img width="623" height="775" alt="image" src="https://github.com/user-attachments/assets/922a518c-c044-49bb-b6a7-0f02e6567044" />
+
+
 Integrated with [ps-mdt](https://github.com/Project-Sloth/ps-mdt)
 
 For all support questions, ask in our [Discord](https://www.discord.gg/projectsloth) support chat. 
