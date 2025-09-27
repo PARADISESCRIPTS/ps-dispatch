@@ -102,6 +102,80 @@
   }
 </script>
 
+<style>
+  @keyframes emergency-lights {
+    0% {
+      background: linear-gradient(90deg, 
+        rgba(220, 38, 38, 0.5) 0%, 
+        rgba(220, 38, 38, 0.2) 25%, 
+        transparent 50%, 
+        rgba(30, 64, 175, 0.1) 75%, 
+        rgba(30, 64, 175, 0.3) 100%);
+      background-size: 200% 100%;
+      background-position: 0% 0%;
+    }
+    50% {
+      background: linear-gradient(90deg, 
+        rgba(30, 64, 175, 0.3) 0%, 
+        rgba(30, 64, 175, 0.1) 25%, 
+        transparent 50%, 
+        rgba(220, 38, 38, 0.2) 75%, 
+        rgba(220, 38, 38, 0.5) 100%);
+      background-size: 200% 100%;
+      background-position: 100% 0%;
+    }
+    100% {
+      background: linear-gradient(90deg, 
+        rgba(220, 38, 38, 0.5) 0%, 
+        rgba(220, 38, 38, 0.2) 25%, 
+        transparent 50%, 
+        rgba(30, 64, 175, 0.1) 75%, 
+        rgba(30, 64, 175, 0.3) 100%);
+      background-size: 200% 100%;
+      background-position: 0% 0%;
+    }
+  }
+
+  .emergency-overlay {
+    position: relative;
+    background-color: rgba(7, 17, 51, 0.98);
+  }
+
+  .emergency-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: emergency-lights 1.5s infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .emergency-overlay > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  :global(::-webkit-scrollbar) {
+    width: 4px;
+  }
+  
+  :global(::-webkit-scrollbar-track) {
+    background: rgb(30, 41, 59);
+  }
+  
+  :global(::-webkit-scrollbar-thumb) {
+    background: rgb(59, 130, 246);
+    border-radius: 2px;
+  }
+  
+  :global(::-webkit-scrollbar-thumb:hover) {
+    background: rgb(37, 99, 235);
+  }
+</style>
+
 <div class="w-screen h-screen flex items-center justify-end { menuRight ? 'flex-row' : 'flex-row-reverse' } " transition:fly="{{ x: menuRight ? 400 : -400 }}">
   <!-- CONTROL PANEL -->
   <div class="w-[4vh] h-[85%] flex flex-col gap-[1vh]" class:ml-[1vh]={!menuRight} class:mr-[1vh]={menuRight}>
@@ -171,17 +245,17 @@
       {#each $processedDispatchMenu as dispatch, index}
       <div class="mb-[1vh] {dispatch.priority == 1 ? 'border-l-4 border-red-500' : 'border-l-4 border-blue-500'}">
         <!-- DISPATCH CARD -->
-        <div class="bg-slate-900 hover:bg-slate-800 transition-colors duration-200">
+        <div class="{dispatch.priority == 1 ? 'emergency-overlay' : 'bg-slate-900 hover:bg-slate-800'} transition-colors duration-200">
           <!-- MAIN CONTENT -->
           <button class="w-full p-[1.5vh] text-left" on:click={() => toggleDispatch(dispatch.id)}>
             <!-- HEADER ROW -->
             <div class="flex items-center gap-[1vh] mb-[1vh]">
               <!-- CALL ID -->
-              <div class="px-[1vh] py-[0.3vh] bg-blue-600 text-white font-bold text-[1.2vh] font-mono">
+              <div class="px-[1vh] py-[0.3vh] bg-blue-600 text-white font-bold text-[1.2vh] font-mono rounded-lg">
                 #{dispatch.id}
               </div>
               <!-- CODE -->
-              <div class="px-[1vh] py-[0.3vh] {dispatch.priority == 1 ? 'bg-red-600' : 'bg-slate-700'} text-white font-semibold text-[1.2vh]">
+              <div class="px-[1vh] py-[0.3vh] {dispatch.priority == 1 ? 'bg-red-600' : 'bg-slate-700'} text-white font-semibold text-[1.2vh] rounded-lg">
                 {dispatch.code}
               </div>
               <!-- STATUS ICON -->
@@ -320,23 +394,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  :global(::-webkit-scrollbar) {
-    width: 4px;
-  }
-  
-  :global(::-webkit-scrollbar-track) {
-    background: rgb(30, 41, 59);
-  }
-  
-  :global(::-webkit-scrollbar-thumb) {
-    background: rgb(59, 130, 246);
-    border-radius: 2px;
-  }
-  
-  :global(::-webkit-scrollbar-thumb:hover) {
-    background: rgb(37, 99, 235);
-  }
-</style>
-

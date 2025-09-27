@@ -59,6 +59,79 @@
   }
 </script>
 
+<style>
+  @keyframes emergency-lights {
+    0% {
+      background: linear-gradient(90deg, 
+        rgba(220, 38, 38, 0.5) 0%, 
+        rgba(220, 38, 38, 0.2) 25%, 
+        transparent 50%, 
+        rgba(30, 64, 175, 0.1) 75%, 
+        rgba(30, 64, 175, 0.3) 100%);
+      background-size: 200% 100%;
+      background-position: 0% 0%;
+    }
+    50% {
+      background: linear-gradient(90deg, 
+        rgba(30, 64, 175, 0.3) 0%, 
+        rgba(30, 64, 175, 0.1) 25%, 
+        transparent 50%, 
+        rgba(220, 38, 38, 0.2) 75%, 
+        rgba(220, 38, 38, 0.5) 100%);
+      background-size: 200% 100%;
+      background-position: 100% 0%;
+    }
+    100% {
+      background: linear-gradient(90deg, 
+        rgba(220, 38, 38, 0.5) 0%, 
+        rgba(220, 38, 38, 0.2) 25%, 
+        transparent 50%, 
+        rgba(30, 64, 175, 0.1) 75%, 
+        rgba(30, 64, 175, 0.3) 100%);
+      background-size: 200% 100%;
+      background-position: 0% 0%;
+    }
+  }
+
+  .emergency-overlay {
+    position: relative;
+    background-color: rgba(7, 17, 51, 0.98);
+  }
+
+  .emergency-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: emergency-lights 1.5s infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .emergency-overlay > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  :global(::-webkit-scrollbar) {
+    width: 4px;
+  }
+  
+  :global(::-webkit-scrollbar-track) {
+    background: rgb(30, 41, 59);
+  }
+  
+  :global(::-webkit-scrollbar-thumb) {
+    background: rgb(59, 130, 246);
+    border-radius: 2px;
+  }
+  
+  :global(::-webkit-scrollbar-thumb:hover) {
+    background: rgb(37, 99, 235);
+  }
+</style>
 
 <div class="w-screen h-screen flex justify-end { $IS_RIGHT_MARGIN ? 'flex-row' : 'flex-row-reverse' } items-end">
   <div class="w-[28%] h-[97%]"
@@ -66,16 +139,16 @@
        class:mr-[2vh]={$IS_RIGHT_MARGIN}
       >
     {#each notifications.slice().reverse() as dispatch, index (dispatch.data.id)}
-      <div class="w-full h-fit my-[0.5vh] {dispatch.data.priority == 1 ? 'border-l-4 border-red-500' : 'border-l-4 border-blue-500'} bg-slate-900 hover:bg-slate-800 transition-colors duration-200" transition:fly="{{ x: $IS_RIGHT_MARGIN ? 400 : -400 }}">
+      <div class="w-full h-fit my-[0.5vh] {dispatch.data.priority == 1 ? 'border-l-4 emergency-overlay' : 'border-l-4 border-blue-500'} {dispatch.data.priority == 1 ? 'emergency-overlay' : 'bg-slate-900 hover:bg-slate-800'} transition-colors duration-200" transition:fly="{{ x: $IS_RIGHT_MARGIN ? 400 : -400 }}">
         <!-- HEADER -->
-        <div class="bg-slate-800 p-[1.5vh] border-b border-slate-700">
+        <div class="{dispatch.data.priority == 1 ? 'emergency-overlay' : 'bg-slate-800'} p-[1.5vh] border-b {dispatch.data.priority == 1 ? 'emergency-overlay' : 'border-slate-700'}">
           <div class="flex items-center gap-[1vh]">
             <!-- CALL ID -->
-            <div class="px-[1vh] py-[0.3vh] bg-blue-600 text-white font-bold text-[1.2vh] font-mono">
+            <div class="px-[1vh] py-[0.3vh] bg-blue-600 text-white font-bold text-[1.2vh] font-mono rounded-lg">
               #{dispatch.data.id}
             </div>
             <!-- CODE -->
-            <div class="px-[1vh] py-[0.3vh] {dispatch.data.priority == 1 ? 'bg-red-600' : 'bg-slate-700'} text-white font-semibold text-[1.2vh]">
+            <div class="px-[1vh] py-[0.3vh] {dispatch.data.priority == 1 ? 'bg-red-600' : 'bg-slate-700'} text-white font-semibold text-[1.2vh] rounded-lg">
               {dispatch.data.code}
             </div>
             <!-- MESSAGE -->
